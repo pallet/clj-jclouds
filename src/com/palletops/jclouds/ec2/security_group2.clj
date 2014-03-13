@@ -26,8 +26,7 @@
    org.jclouds.ec2.features.SecurityGroupApi
    org.jclouds.net.domain.IpProtocol))
 
-(defn ^SecurityGroupApi
-  sg-service
+(defn ^SecurityGroupApi sg-service
   "Returns the SecurityGroup Api associated with the specified compute
   service."
   [compute]
@@ -36,9 +35,12 @@
 (defn create-group
   "Creates a new security group.
 
-  e.g. (create-group compute \"Database Server\" \"Description for group\" :region :us-west-1)"
+  e.g. (create-group
+         compute \"Database Server\" \"Description for group\"
+         :region :us-west-1)"
   [compute name & {:keys [description region]}]
-  (.createSecurityGroupInRegion (sg-service compute) (get-region region) name (or description name)))
+  (.createSecurityGroupInRegion
+   (sg-service compute) (get-region region) name (or description name)))
 
 (defn delete-group
   "Deletes a security group.
@@ -52,10 +54,12 @@
 
    e.g. (groups compute :region :us-east-1)"
   [compute & {:keys [region]}]
-  (into {} (for [^SecurityGroup group (.describeSecurityGroupsInRegion (sg-service compute)
-                                                                       (get-region region)
-                                                                       (into-array String '()))]
-             [(.getName group) group])))
+  (into {}
+        (for [^SecurityGroup group (.describeSecurityGroupsInRegion
+                                    (sg-service compute)
+                                    (get-region region)
+                                    (into-array String '()))]
+          [(.getName group) group])))
 
 (defn get-protocol [v]
   "Coerce argument to a IP Protocol."
@@ -66,36 +70,45 @@
                                  :icmp IpProtocol/ICMP}
                                 v)]
                   p
-                  (throw (IllegalArgumentException.
-                          (str "Can't obtain IP protocol from " v " (valid :tcp, :udp and :icmp)"))))
+                  (throw
+                   (IllegalArgumentException.
+                    (str "Can't obtain IP protocol from " v
+                         " (valid :tcp, :udp and :icmp)"))))
    (nil? v) IpProtocol/TCP
    :else (throw (IllegalArgumentException.
-                 (str "Can't obtain IP protocol from argument of type " (type v))))))
+                 (str "Can't obtain IP protocol from argument of type "
+                      (type v))))))
 
 (defn authorize
   "Adds permissions to a security group.
 
-   e.g. (authorize compute \"jclouds#webserver#us-east-1\" 80 :ip-range \"0.0.0.0/0\")
-        (authorize compute \"jclouds#webserver#us-east-1\" [1000,2000] :protocol :udp)"
+   e.g. (authorize
+         compute \"jclouds#webserver#us-east-1\" 80 :ip-range \"0.0.0.0/0\")
+        (authorize
+         compute \"jclouds#webserver#us-east-1\" [1000,2000] :protocol :udp)"
 
   [compute group-name port & {:keys [protocol ip-range region]}]
   (let [group ((groups compute :region region) group-name)
         [from-port to-port] (if (number? port) [port port] port)]
     (if group
       (.authorizeSecurityGroupIngressInRegion
-       (sg-service compute) (get-region region) (.getName group) (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
+       (sg-service compute) (get-region region) (.getName group)
+       (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
       (throw (IllegalArgumentException.
               (str "Can't find security group for name " group-name))))))
 
 (defn revoke
   "Revokes permissions from a security group.
 
-   e.g. (revoke compute 80 \"jclouds#webserver#us-east-1\" :protocol :tcp 80 80 :ip-range \"0.0.0.0/0\")"
+   e.g. (revoke
+         compute 80 \"jclouds#webserver#us-east-1\" :protocol :tcp 80 80
+         :ip-range \"0.0.0.0/0\")"
   [compute group-name port & {:keys [protocol ip-range region]}]
   (let [group ((groups compute :region region) group-name)
         [from-port to-port] (if (number? port) [port port] port)]
     (if group
-     (.revokeSecurityGroupIngressInRegion
-      (sg-service compute) (get-region region) (.getName group) (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
-     (throw (IllegalArgumentException.
-             (str "Can't find security group for name " group-name))))))
+      (.revokeSecurityGroupIngressInRegion
+       (sg-service compute) (get-region region) (.getName group)
+       (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
+      (throw (IllegalArgumentException.
+              (str "Can't find security group for name " group-name))))))
