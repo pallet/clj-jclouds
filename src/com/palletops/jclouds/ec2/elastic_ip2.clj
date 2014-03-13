@@ -20,7 +20,7 @@
   "A clojure binding for the jclouds AWS elastic IP address interface."
   (:require
    [com.palletops.jclouds.compute2 :as compute]
-   [com.palletops.jclouds.ec2.ebs2 :as ebs])
+   [com.palletops.jclouds.ec2.core :refer [aws-ec2-api get-region]])
   (:import org.jclouds.compute.domain.NodeMetadata
     (org.jclouds.ec2.domain PublicIpInstanceIdPair)))
 
@@ -28,53 +28,61 @@
   eip-service
   "Returns an ElasticIPAddressApi for the given ComputeService"
   [compute]
-  (-> compute
-    .getContext .getProviderSpecificContext .getApi .getElasticIPAddressApi .get))
+  (-> compute aws-ec2-api .getElasticIPAddressApi .get))
 
 (defn allocate
-  "Claims a new elastic IP address within the (optionally) specified region for your account.
-   Region may be a string, keyword, or a node from which the region
-   is inferred.  Returns the IP address as a string."
+  "Claims a new elastic IP address within the (optionally) specified
+   region for your account.  Region may be a string, keyword, or a
+   node from which the region is inferred.  Returns the IP address as
+   a string."
   ([compute] (allocate compute nil))
   ([compute region]
-    (.allocateAddressInRegion (eip-service compute) (ebs/get-region region))))
+     (.allocateAddressInRegion (eip-service compute) (get-region region))))
 
 (defn associate
   "Associates an elastic IP address with a node."
   ([compute ^NodeMetadata node public-ip]
-    (associate node public-ip (.getProviderId node)))
+     (associate node public-ip (.getProviderId node)))
   ([compute region public-ip instance-id]
-    (.associateAddressInRegion (eip-service compute)
-      (ebs/get-region region)
-      public-ip
-      instance-id)))
+     (.associateAddressInRegion (eip-service compute)
+                                (get-region region)
+                                public-ip
+                                instance-id)))
 
 (defn addresses
   "Returns a map of elastic IP addresses to maps with slots:
 
-   :region - the region (string/keyword/NodeMetadata) the IP address is allocated within
-   :node-id - the ID of the instance with which the IP address is associated (optional)
+   :region - the region (string/keyword/NodeMetadata) the IP address
+             is allocated within
+
+   :node-id - the ID of the instance with which the IP address is
+              associated (optional)
 
    You may optionally specify which IP addresses you would like to query."
   ([compute] (addresses compute nil))
   ([compute region & public-ips]
-    (into {} (for [^PublicIpInstanceIdPair pair (.describeAddressesInRegion (eip-service compute)
-                                                   (ebs/get-region region)
-                                                   (into-array String public-ips))]
-               [(.getPublicIp pair) (merge {:region (.getRegion pair)}
-                                      (when (.getInstanceId pair) {:node-id (.getInstanceId pair)}))]))))
+     (into {} (for [^PublicIpInstanceIdPair pair
+                    (.describeAddressesInRegion
+                     (eip-service compute)
+                     (get-region region)
+                     (into-array String public-ips))]
+                [(.getPublicIp pair)
+                 (merge {:region (.getRegion pair)}
+                        (when (.getInstanceId pair)
+                          {:node-id (.getInstanceId pair)}))]))))
 
 (defn dissociate
-  "Dissociates an elastic IP address from the node with which it is currently associated."
+  "Dissociates an elastic IP address from the node with which it is
+  currently associated."
   [compute region public-ip]
   (.disassociateAddressInRegion (eip-service compute)
-    (ebs/get-region region)
-    public-ip))
+                                (get-region region)
+                                public-ip))
 
 (defn release
   "Disclaims an elastic IP address from your account."
   ([compute public-ip] (release compute public-ip nil))
   ([compute public-ip region]
-    (.releaseAddressInRegion (eip-service compute)
-      (ebs/get-region region)
-      public-ip)))
+     (.releaseAddressInRegion (eip-service compute)
+                              (get-region region)
+                              public-ip)))

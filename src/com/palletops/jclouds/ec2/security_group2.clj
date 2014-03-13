@@ -20,30 +20,32 @@
   "A clojure binding for the jclouds AWS security group interface."
   (:require
    [com.palletops.jclouds.compute2 :as compute]
-   [com.palletops.jclouds.ec2.ebs2 :as ebs])
-  (:import org.jclouds.ec2.domain.SecurityGroup
-           org.jclouds.ec2.features.SecurityGroupApi
-           org.jclouds.net.domain.IpProtocol))
+   [com.palletops.jclouds.ec2.core :refer [aws-ec2-api get-region]])
+  (:import
+   org.jclouds.ec2.domain.SecurityGroup
+   org.jclouds.ec2.features.SecurityGroupApi
+   org.jclouds.net.domain.IpProtocol))
 
 (defn ^SecurityGroupApi
   sg-service
-  "Returns the SecurityGroup Api associated with the specified  compute service."
+  "Returns the SecurityGroup Api associated with the specified compute
+  service."
   [compute]
-  (-> compute .getContext .getProviderSpecificContext .getApi .getSecurityGroupApi .get))
+  (-> compute aws-ec2-api .getSecurityGroupApi .get))
 
 (defn create-group
   "Creates a new security group.
 
   e.g. (create-group compute \"Database Server\" \"Description for group\" :region :us-west-1)"
   [compute name & {:keys [description region]}]
-  (.createSecurityGroupInRegion (sg-service compute) (ebs/get-region region) name (or description name)))
+  (.createSecurityGroupInRegion (sg-service compute) (get-region region) name (or description name)))
 
 (defn delete-group
   "Deletes a security group.
 
   e.g. (delete-group compute \"Database Server\" :region :us-west-1)"
   [compute name & {:keys [region]}]
-  (.deleteSecurityGroupInRegion (sg-service compute) (ebs/get-region region) name))
+  (.deleteSecurityGroupInRegion (sg-service compute) (get-region region) name))
 
 (defn groups
   "Returns a map of GroupName -> org.jclouds.ec2.domain.SecurityGroup instances.
@@ -51,7 +53,7 @@
    e.g. (groups compute :region :us-east-1)"
   [compute & {:keys [region]}]
   (into {} (for [^SecurityGroup group (.describeSecurityGroupsInRegion (sg-service compute)
-                                                                       (ebs/get-region region)
+                                                                       (get-region region)
                                                                        (into-array String '()))]
              [(.getName group) group])))
 
@@ -81,7 +83,7 @@
         [from-port to-port] (if (number? port) [port port] port)]
     (if group
       (.authorizeSecurityGroupIngressInRegion
-       (sg-service compute) (ebs/get-region region) (.getName group) (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
+       (sg-service compute) (get-region region) (.getName group) (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
       (throw (IllegalArgumentException.
               (str "Can't find security group for name " group-name))))))
 
@@ -94,6 +96,6 @@
         [from-port to-port] (if (number? port) [port port] port)]
     (if group
      (.revokeSecurityGroupIngressInRegion
-      (sg-service compute) (ebs/get-region region) (.getName group) (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
+      (sg-service compute) (get-region region) (.getName group) (get-protocol protocol) from-port to-port (or ip-range "0.0.0.0/0"))
      (throw (IllegalArgumentException.
              (str "Can't find security group for name " group-name))))))

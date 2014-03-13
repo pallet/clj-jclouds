@@ -19,11 +19,17 @@
   com.palletops.jclouds.ec2.ebs2
   "A clojure binding to the jclouds EBS service interface."
   (:require
-   [com.palletops.jclouds.compute2 :refer [location]])
+   [com.palletops.jclouds.compute2 :refer [location]]
+   [com.palletops.jclouds.ec2.core :refer [aws-ec2-api get-region]])
   (:import org.jclouds.aws.domain.Region
     org.jclouds.compute.domain.NodeMetadata
     (org.jclouds.ec2.domain Volume Volume$Status Snapshot Snapshot$Status AvailabilityZoneInfo)
     (org.jclouds.ec2.options DescribeSnapshotsOptions DetachVolumeOptions CreateSnapshotOptions)))
+
+(defn ebs-service
+  "Return the EBS api object for the compute service."
+  [compute]
+  (-> compute aws-ec2-api .getElasticBlockStoreServices .get))
 
 (defn snapshot?
   "Returns true iff the argument is a org.jclouds.ec2.domain.Snapshot."
@@ -34,33 +40,6 @@
   "Returns true iff the argument is a org.jclouds.ec2.domain.Volume."
   [v]
   (instance? Volume v))
-
-(defn
-  ebs-service
-  ""
-  [compute]
-  (-> compute
-    .getContext
-    .getProviderSpecificContext
-    .getApi
-    .getElasticBlockStoreServices))
-
-(defn get-region
-  "Coerces the first parameter into a Region string; strings, keywords, and
-   NodeMetadata instances are acceptable arguments. An optional second argument
-   is returned if the first cannot be coerced into a region string.
-   Returns nil otherwise."
-  ([v] (get-region v nil))
-  ([v default-region]
-    (cond
-      (string? v) v
-      (keyword? v) (name v)
-      (instance? NodeMetadata v) (let [zone (location v)]
-      ; no easier way to go from zone -> region?
-      (if (> (.indexOf zone "-") -1)
-        (subs zone 0 (-> zone count dec))
-        zone))
-      :else default-region)))
 
 (defn get-volume-id
   "Returns a string volume ID taken from the given string, keyword, or Volume argument."
