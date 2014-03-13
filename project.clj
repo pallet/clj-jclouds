@@ -8,4 +8,5 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.logging "0.2.6"]
                  [org.apache.jclouds.provider/aws-ec2 "1.7.1"]
-                 [org.apache.jclouds/jclouds-blobstore "1.7.1"]])
+                 [org.apache.jclouds/jclouds-blobstore "1.7.1"]]
+  :profiles {:dev {:dependencies [[ch.qos.logback/logback-classic "1.0.9"]]}})
