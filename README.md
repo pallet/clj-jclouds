@@ -1,5 +1,7 @@
 # clj-jclouds
 
+[![Build Status](https://travis-ci.org/pallet/clj-jclouds.png?branch=develop)](https://travis-ci.org/pallet/clj-jclouds)
+
 A Clojure wrapper for [jclouds][jclouds].
 
 ## Install
