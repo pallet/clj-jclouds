@@ -2,3 +2,9 @@ language: clojure
 lein: lein2
 before_script:
 script: lein2 test
+env:
+  global:
+    secure: I5Ti9xmfcbZRh5+lkTI7dNvLhEjvYHqVT8gJGzYoU22e82KfKZmeEPGEBCQPg+VHK6+Y57uyIMhnpTG7wrJyRCc3PyOt4+aU30Nr94HpQowem7s0xEBLihQZfd2xFW6nbXEUsWxZ/hwYKnVNFBBhxgfEOjc8LbXh48ef8Enl7VM=
+after_success:
+- git remote add github https://hugoduncan:${GH_TOKEN}@github.com/pallet/clj-jclouds.git
+- if $(git rev-parse --abbrev-ref HEAD | egrep "^release-.*"); then git push github $(git rev-parse --abbrev-ref HEAD):master; fi
