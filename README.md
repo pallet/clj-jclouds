@@ -9,7 +9,7 @@ A Clojure wrapper for [jclouds][jclouds].
 Add to your dependencies:
 
 ```clj
-:dependencies [com.palletops/clj-jclouds "1.7.0"]
+:dependencies [com.palletops/clj-jclouds "0.1.0"]
 ```
 
 ## Usage

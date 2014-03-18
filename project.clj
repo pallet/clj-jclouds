@@ -1,6 +1,4 @@
-(def jclouds-ver "1.7.1")
-
-(defproject com.palletops/clj-jclouds "0.1.0-SNAPSHOT"
+(defproject com.palletops/clj-jclouds "0.1.0"
   :description "A clojure wrapper for jclouds"
   :url "http://palletops.com/clj-jclouds"
   :license {:name "Eclipse Public License"
