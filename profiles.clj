@@ -1,4 +1,5 @@
-{:dev {:dependencies [[ch.qos.logback/logback-classic "1.0.9"]]}
+{:dev {:dependencies [[ch.qos.logback/logback-classic "1.0.9"]]
+       :plugins [[lein-set-version "0.4.1"]]}
  :no-checkouts {:checkout-deps-shares ^:replace []} ; disable checkouts
  :doc {:dependencies [[com.palletops/pallet-codox "0.1.0"]]
        :plugins [[codox/codox.leiningen "0.6.4"]
