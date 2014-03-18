@@ -4,7 +4,6 @@ before_script:
 script: lein2 test
 env:
   global:
-    secure: I5Ti9xmfcbZRh5+lkTI7dNvLhEjvYHqVT8gJGzYoU22e82KfKZmeEPGEBCQPg+VHK6+Y57uyIMhnpTG7wrJyRCc3PyOt4+aU30Nr94HpQowem7s0xEBLihQZfd2xFW6nbXEUsWxZ/hwYKnVNFBBhxgfEOjc8LbXh48ef8Enl7VM=
+    secure: AxNXAOwz7r/ITyNzfdLRPizqEvx30BsgSSG+oG7f0imWa7fWpCC1ANSfheroBfx8dXsgrw6be57r2oH9IiWtD1iLdpOn4ppv1A2yugFBG88C6XokH2iI6nbSNfLqlChXrmlCypJJbxc0poRlFxqN2/tv3NiEJ+0OTvkA+rsJQFk=
 after_success:
-- git remote add github https://hugoduncan:${GH_TOKEN}@github.com/pallet/clj-jclouds.git
-- if $(git rev-parse --abbrev-ref HEAD | egrep "^release-.*"); then git push github $(git rev-parse --abbrev-ref HEAD):master; fi
+- bash .travis/after_success

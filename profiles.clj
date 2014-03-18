@@ -11,7 +11,7 @@
                  "codox" ["doc"]
                  "doc" ["do" "codox," "marg"]}}
  :release
- {:plugins [[lein-set-version "0.3.0"]
+ {:plugins [[lein-set-version "0.4.1"]
             [lein-shell "0.4.0"]]
   :set-version {:updates [{:path "README.md" :no-snapshot true}]}
   :aliases
