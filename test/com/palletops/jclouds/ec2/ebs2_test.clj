@@ -1,7 +1,7 @@
 (ns com.palletops.jclouds.ec2.ebs2-test
-  (:require
-   [clojure.test :refer :all]
-   [com.palletops.jclouds.ec2.ebs2 :refer :all]))
+  (:use
+   [clojure.test]
+   [com.palletops.jclouds.ec2.ebs2]))
 
 ;; TODO add some tests
 

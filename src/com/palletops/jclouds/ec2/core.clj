@@ -15,8 +15,8 @@
 
 (ns com.palletops.jclouds.ec2.core
   "A clojure binding to core jclouds EC2 functions."
-  (:require
-   [com.palletops.jclouds.compute2 :refer [location]])
+  (:use
+   [com.palletops.jclouds.compute2 :only [location]])
   (:import
    org.jclouds.aws.ec2.AWSEC2Api
    org.jclouds.compute.domain.NodeMetadata))

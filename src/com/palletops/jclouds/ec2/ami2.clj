@@ -18,8 +18,8 @@
 (ns ^{:author "Hunter Hutchinson, hunter.hutchinson@gmail.com"}
   com.palletops.jclouds.ec2.ami2
   "A clojure binding to the jclouds AMI service interface."
-  (:require
-   [com.palletops.jclouds.compute2 :refer [location]])
+  (:use
+   [com.palletops.jclouds.compute2 :only [location]])
   (:import
    org.jclouds.aws.domain.Region
    org.jclouds.ec2.features.AMIApi

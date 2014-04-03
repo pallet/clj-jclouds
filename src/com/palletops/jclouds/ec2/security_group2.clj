@@ -18,9 +18,9 @@
 (ns ^{:author "Juegen Hoetzel, juergen@archlinux.org"}
   com.palletops.jclouds.ec2.security-group2
   "A clojure binding for the jclouds AWS security group interface."
-  (:require
+  (:use
    [com.palletops.jclouds.compute2 :as compute]
-   [com.palletops.jclouds.ec2.core :refer [aws-ec2-api get-region]])
+   [com.palletops.jclouds.ec2.core :only [aws-ec2-api get-region]])
   (:import
    org.jclouds.ec2.domain.SecurityGroup
    org.jclouds.ec2.features.SecurityGroupApi

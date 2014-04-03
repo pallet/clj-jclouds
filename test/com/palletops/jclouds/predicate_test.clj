@@ -1,6 +1,6 @@
 (ns com.palletops.jclouds.predicate-test
-  (:require
-   [clojure.test :refer :all]
+  (:use
+   [clojure.test]
    [com.palletops.jclouds.predicate]))
 
 ;; TODO add some tests

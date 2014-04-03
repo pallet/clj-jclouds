@@ -16,9 +16,9 @@
 ;
 
 (ns com.palletops.jclouds.blobstore2-test
-  (:require
-   [com.palletops.jclouds.blobstore2 :refer :all]
-   [clojure.test :refer :all])
+  (:use
+   [com.palletops.jclouds.blobstore2]
+   [clojure.test])
   (:import [java.io ByteArrayInputStream ByteArrayOutputStream
             StringBufferInputStream]
            [org.jclouds.util Strings2]))

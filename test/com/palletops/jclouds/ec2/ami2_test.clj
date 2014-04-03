@@ -1,6 +1,6 @@
 (ns com.palletops.jclouds.ec2.ami2-test
-  (:require
-   [clojure.test :refer :all]
+  (:use
+   [clojure.test]
    [com.palletops.jclouds.ec2.ami2]))
 
 ;; TODO add some tests

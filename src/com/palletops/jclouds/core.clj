@@ -17,9 +17,9 @@
 
 (ns com.palletops.jclouds.core
   "Core functionality used across blobstore and compute."
-  (:require
-   [clojure.string :refer [capitalize lower-case]]
-   [clojure.tools.logging :refer [debugf warn]])
+  (:use [clojure.tools.logging :only [debugf warn]]
+        [clojure.string :only [capitalize lower-case]])
+  
   (:import java.io.File
            (com.google.common.collect ImmutableSet)))
 

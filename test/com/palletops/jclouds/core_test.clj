@@ -16,12 +16,12 @@
 ;
 
 (ns com.palletops.jclouds.core-test
-  (:require
-   [clojure.test :refer :all]
-   [com.palletops.jclouds.core :as core :refer :all]))
+  (:use
+   [clojure.test]
+   [com.palletops.jclouds.core]))
 
 (deftest instantiate-test
-  (is (instance? String (#'core/instantiate 'java.lang.String))))
+  (is (instance? String (#'com.palletops.jclouds.core/instantiate 'java.lang.String))))
 
 (deftest modules-empty-test
   (is (.isEmpty (modules))))

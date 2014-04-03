@@ -18,9 +18,9 @@
 (ns ^{:author "Chas Emerick, cemerick@snowtide.com"}
   com.palletops.jclouds.ec2.ebs2
   "A clojure binding to the jclouds EBS service interface."
-  (:require
-   [com.palletops.jclouds.compute2 :refer [location]]
-   [com.palletops.jclouds.ec2.core :refer [aws-ec2-api get-region]])
+  (:use
+   [com.palletops.jclouds.compute2 :only [location]]
+   [com.palletops.jclouds.ec2.core :only [aws-ec2-api get-region]])
   (:import org.jclouds.aws.domain.Region
     org.jclouds.compute.domain.NodeMetadata
     (org.jclouds.ec2.domain Volume Volume$Status Snapshot Snapshot$Status AvailabilityZoneInfo)

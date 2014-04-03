@@ -57,26 +57,28 @@ Here's an example of creating and running a small linux node in the group webser
   (create-node \"webserver\" compute)
 
   See http://org.apache.jclouds for details."
-  (:require
-   [com.palletops.jclouds.core
-    :refer [define-accessors kw-memfn-0arg kw-memfn-1arg kw-memfn-2arg
-            kw-memfn-apply kw-memfn-varargs
-            make-option-map module-lookup modules]]
-   [com.palletops.jclouds.predicate :refer [to-predicate]])
+  (:use [clojure.reflect :as reflect]
+        [clojure.pprint :as pprint]
+        [com.palletops.jclouds.core
+         :only [define-accessors kw-memfn-0arg kw-memfn-1arg kw-memfn-2arg
+                kw-memfn-apply kw-memfn-varargs dashed
+                make-option-map module-lookup modules]]
+        [com.palletops.jclouds.predicate :only [to-predicate]]
+        [clojure.string :only [join lower-case split] :as string])
   (:import java.io.File
-    java.util.Properties
-    [org.jclouds ContextBuilder]
-    [org.jclouds.domain Location]
-    [org.jclouds.compute
-     ComputeService ComputeServiceContext]
-    [org.jclouds.compute.domain
-     Template TemplateBuilder ComputeMetadata NodeMetadata Hardware
-     OsFamily Image]
-    [org.jclouds.compute.options TemplateOptions RunScriptOptions
-     RunScriptOptions$Builder]
-    [org.jclouds.compute.predicates
-     NodePredicates]
-    [com.google.common.collect ImmutableSet]))
+           java.util.Properties
+           [org.jclouds ContextBuilder]
+           [org.jclouds.domain Location]
+           [org.jclouds.compute
+            ComputeService ComputeServiceContext]
+           [org.jclouds.compute.domain
+            Template TemplateBuilder ComputeMetadata NodeMetadata Hardware
+            OsFamily Image]
+           [org.jclouds.compute.options TemplateOptions RunScriptOptions
+            RunScriptOptions$Builder]
+           [org.jclouds.compute.predicates
+            NodePredicates]
+           [com.google.common.collect ImmutableSet]))
 
 (defn compute-service
   "Create a logged in context."

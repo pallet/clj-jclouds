@@ -18,9 +18,9 @@
 (ns ^{:author "Chas Emerick, cemerick@snowtide.com"}
   com.palletops.jclouds.ec2.elastic-ip2
   "A clojure binding for the jclouds AWS elastic IP address interface."
-  (:require
+  (:use
    [com.palletops.jclouds.compute2 :as compute]
-   [com.palletops.jclouds.ec2.core :refer [aws-ec2-api get-region]])
+   [com.palletops.jclouds.ec2.core :only [aws-ec2-api get-region]])
   (:import org.jclouds.compute.domain.NodeMetadata
     (org.jclouds.ec2.domain PublicIpInstanceIdPair)))
 
