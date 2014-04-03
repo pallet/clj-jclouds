@@ -57,8 +57,7 @@ Here's an example of creating and running a small linux node in the group webser
   (create-node \"webserver\" compute)
 
   See http://org.apache.jclouds for details."
-  (:use [clojure.reflect :as reflect]
-        [clojure.pprint :as pprint]
+  (:use [clojure.pprint :as pprint]
         [com.palletops.jclouds.core
          :only [define-accessors kw-memfn-0arg kw-memfn-1arg kw-memfn-2arg
                 kw-memfn-apply kw-memfn-varargs dashed
